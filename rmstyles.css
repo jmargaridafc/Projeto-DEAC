@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Reservations - Hotel Management</title>
-  
-  <style>
+<style>
     /* RESET E CONFIGURAÇÕES GERAIS */
     * {
       margin: 0;
@@ -14,7 +7,7 @@
     }
     
     body {
-      font-family: Inter, Helvetica, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background-color: #f5f5f5;
     }
     
@@ -264,114 +257,3 @@
       background-color: #357ABD;
     }
   </style>
-</head>
-<body>
-  
-  <!-- CABEÇALHO -->
-  <header>
-    <div class="logo">LOGO</div>
-    <nav class="header-nav">
-      <a href="#" class="icon-link" title="Language">🌐</a>
-      <a href="#" class="icon-link" title="Help">❓</a>
-      <a href="#" class="icon-link" title="Profile">👤</a>
-    </nav>
-  </header>
-
-  <!-- CONTENTOR PRINCIPAL -->
-  <div class="main-container">
-    
-    <!-- MENU LATERAL -->
-    <aside class="sidebar">
-      <nav>
-        <ul>
-          <li><a href="reservations.html" class="active">Reservations</a></li>
-          <li><a href="rooms.html">Rooms</a></li>
-          <li><a href="guests.html">Guests</a></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
-    <main class="content">
-      
-      <h1>Manage Reservations</h1>
-
-      <!-- BARRA DE PESQUISA -->
-      <div class="search-bar">
-        <input type="text" placeholder="Search by guest name, reservation ID or room">
-      </div>
-
-      <!-- FILTROS -->
-      <div class="filters">
-        <div class="filter-group">
-          <label for="status">Status</label>
-          <select id="status" name="status">
-            <option value="">All</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="pending">Pending</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label for="daterange">Date Range</label>
-          <input type="text" id="daterange" name="daterange" placeholder="Select dates">
-        </div>
-
-        <div class="filter-group">
-          <label for="roomtype">Room type</label>
-          <select id="roomtype" name="roomtype">
-            <option value="">All</option>
-            <option value="single">Single</option>
-            <option value="double">Double</option>
-            <option value="suite">Suite</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- TABELA DE RESERVAS -->
-      <table class="reservations-table">
-        <thead>
-          <tr>
-            <th>Res. ID</th>
-            <th>Guest name</th>
-            <th>Room</th>
-            <th>Check-IN</th>
-            <th>Check-OUT</th>
-            <th>Status</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>R001</td>
-            <td>João Silva</td>
-            <td>101</td>
-            <td>2026-05-20</td>
-            <td>2026-05-25</td>
-            <td>Confirmed</td>
-            <td>€450.00</td>
-            <td><button class="btn-action">View</button></td>
-          </tr>
-        </tbody>
-      </table>
-
-    </main>
-
-  </div>
-
-  <!-- RODAPÉ -->
-  <footer>
-    <div class="newsletter">
-      <p>Subscribe to AdobeXD via Email</p>
-      <p>Excepteur sint occaecat cupidatat non proident...</p>
-      <form>
-        <input type="email" placeholder="Email Address">
-        <button type="submit">contact us</button>
-      </form>
-    </div>
-  </footer>
-
-</body>
-</html>
