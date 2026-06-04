@@ -1,3 +1,15 @@
+<?php
+// 1. Iniciar o motor de sessões do PHP
+session_start();
+
+// 2. Verificação Restrita de Acesso
+if (!isset($_SESSION['user_id'])) {
+    // Se o colega que fez o login não gerou a sessão, o utilizador é expulso
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -86,16 +98,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>R001</td>
-            <td>João Silva</td>
-            <td>101</td>
-            <td>2026-05-20</td>
-            <td>2026-05-25</td>
-            <td>Confirmed</td>
-            <td>€450.00</td>
-            <td><button class="btn-action">View</button></td>
-          </tr>
+          <?php
+          // 1. Estabelecer ligação apontando duas pastas acima (raiz)
+          $db = new SQLite3(__DIR__ . '/../hotel.db');
+          
+          // 2. Extrair todas as reservas existentes
+          $result = $db->query("SELECT * FROM reservas");
+          
+          // 3. Iterar e imprimir cada reserva numa linha dinâmica
+          while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+              echo '<tr>';
+              echo '<td>R00' . $row['id'] . '</td>';
+              echo '<td>' . $row['nome_hospede'] . '</td>';
+              echo '<td>' . $row['quarto'] . '</td>';
+              echo '<td>' . $row['check_in'] . '</td>';
+              echo '<td>' . $row['check_out'] . '</td>';
+              echo '<td>' . $row['status'] . '</td>';
+              echo '<td>€' . $row['preco'] . '</td>';
+              echo '<td><button class="btn-action">View</button></td>';
+              echo '</tr>';
+          }
+          ?>
         </tbody>
       </table>
 

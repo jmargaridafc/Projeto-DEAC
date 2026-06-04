@@ -1,0 +1,102 @@
+commit ecccc9d82b426d6767b3cb503121e5756263951c
+Author: luiscarlos <luiscarlos@DESKTOP-H3CTU5A.localdomain>
+Date:   Tue May 26 13:06:06 2026 +0100
+
+    Criação dos ficheiros PHP para as US CL04, CL05, CL06 e RF07
+
+commit d7ff7e6284b1c638f5217e7105b0453f1b318bc8
+Merge: 235e166 68cc4ae
+Author: luiscarlos <luiscarlos@DESKTOP-H3CTU5A.localdomain>
+Date:   Tue May 26 12:58:03 2026 +0100
+
+    Merge branch 'main' of https://github.com/jmargaridafc/Projeto-DEAC into Reservations-Management
+
+commit 235e166a5d36124ab52042fae3897d47866f7fc3
+Author: luiscarlos <luiscarlos@DESKTOP-H3CTU5A.localdomain>
+Date:   Tue May 26 11:46:21 2026 +0100
+
+    Hotel page
+
+commit 68cc4ae6494d7b9b65045d00349131c973724511
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue May 19 12:07:24 2026 +0100
+
+    Create html
+
+commit a52f21b55f84882f46f6151e85fa038eb48669ed
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue May 19 12:07:04 2026 +0100
+
+    Create css
+
+commit 9bc10fce1ffa1574be441f9ca0f42ad543294642
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue May 19 12:06:42 2026 +0100
+
+    Create images
+
+commit 59ea8badc939c6543744011b112cde48614a2637
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue May 19 12:06:24 2026 +0100
+
+    Delete styles
+
+commit 734659d1f633cdce107c57a368f91068be59d447
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue May 19 12:06:12 2026 +0100
+
+    Delete scripts
+
+commit 6a8259ed40213ca0930883a2caccb55ab3f02222
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue May 19 12:05:58 2026 +0100
+
+    Delete images
+
+commit 31d6e8eefbdcc2239e1401f4286c63037baccc78
+Author: luiscarlos <luiscarlos@DESKTOP-H3CTU5A.localdomain>
+Date:   Tue May 19 11:51:29 2026 +0100
+
+    Acrescentei o ficheiro css
+
+commit 5c22ebbd5883d64beaf247c8f92c5bed89d7de6f
+Author: luiscarlos <luiscarlos@DESKTOP-H3CTU5A.localdomain>
+Date:   Mon May 18 21:58:55 2026 +0100
+
+    Página com styles
+
+commit b00f8927f873cecd8617b1a222055a13044dc139
+Author: luiscarlos <luiscarlos@DESKTOP-H3CTU5A.localdomain>
+Date:   Mon May 18 21:10:41 2026 +0100
+
+    Página de gestão de reservas, primeira versão
+
+commit 0daf8bbacef241cf7e8fdd249e11deeaadd4629a
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Thu May 14 14:48:38 2026 +0100
+
+    Create styles
+
+commit 37598faa65ed8e3b6985afa5b29ad92c0580d793
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Thu May 14 14:48:18 2026 +0100
+
+    Create scripts
+
+commit 1e2171699863b75f898db0ffdd76129c1ee50400
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Thu May 14 14:47:56 2026 +0100
+
+    Create images
+
+commit 2207ed5f281e77a75647f418a9711dbf9b7931b0
+Author: LuisCarlosSilva98 <luiscarlossilva65@hotmail.com>
+Date:   Tue Apr 28 12:28:40 2026 +0100
+
+    Update README.md
+
+commit e2d6be96513f38a02c039ac652a9c2825e5d5d08
+Author: Joana Camacho <94054699+jmargaridafc@users.noreply.github.com>
+Date:   Tue Apr 28 12:01:48 2026 +0100
+
+    Initial commit
