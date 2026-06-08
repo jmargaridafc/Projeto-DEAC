@@ -119,5 +119,7 @@
     </div>
   </footer>
 
+<script src="scripts/hotel_validation.js"></script>
+
 </body>
 </html>
