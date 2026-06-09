@@ -1,0 +1,58 @@
+/* Estrutura da Barra Lateral */
+.filter-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    transform: translateX(-100%); /* Esconde à esquerda */
+    transition: transform 0.3s ease-in-out; /* Deslizar suave */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Classe que ativa a abertura */
+.filter-sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #8c8c8c;
+}
+
+/* Fundo escuro (Overlay) */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1999;
+    display: none;
+}
+
+.sidebar-overlay.open {
+    display: block;
+}
+
+.check-container {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}

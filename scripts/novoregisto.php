@@ -26,23 +26,9 @@
                 </div>
             <?php endif; ?>
 
-            <form action="processar_registo.php" method="POST" class="login-form">
+            <form id="registoForm" action="processar_registo.php" method="POST" class="login-form">
                 
-                <div class="input-group">
-                    <label>Registar como:</label>
-                    <div class="profile-selection">
-                        <label class="profile-radio">
-                            <input type="radio" name="perfil" value="cliente" checked>
-                            <span class="radio-custom"></span>
-                            Cliente
-                        </label>
-                        <label class="profile-radio">
-                            <input type="radio" name="perfil" value="admin">
-                            <span class="radio-custom"></span>
-                            Administrador
-                        </label>
-                    </div>
-                </div>
+                <input type="hidden" name="perfil" value="cliente">
 
                 <div class="input-group">
                     <label for="username">Nome de Utilizador</label>
@@ -56,7 +42,7 @@
 
                 <div class="input-group">
                     <label for="password_conf">Confirmar Palavra-passe</label>
-                    <input type="password" id="password_conf" name="password_conf" placeholder="Repita a sua password" required>
+                    <input type="password" id="confirm_password" name="password_conf" placeholder="Repita a sua password" required>
                 </div>
 
                 <button type="submit" class="btn-login" style="margin-top: 15px;">Criar Conta</button>
@@ -68,5 +54,6 @@
         </div>
     </main>
 
+    <script src="validacao.js"></script>
 </body>
 </html>

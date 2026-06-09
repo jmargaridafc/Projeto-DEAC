@@ -1,83 +1,56 @@
 <?php
-session_start();
+// scripts/processar_registo.php
 
-// Configurações da Base de Dados (Altere com os seus dados reais)
-$db_host = "localhost";
-$db_user = "root";
-$db_pass = "";
-$db_name = "o_seu_banco_de_dados";
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-    
-    if ($conn->connect_error) {
-        die("Falha na conexão: " . $conn->connect_error);
-    }
-    
-    // Captura os dados do formulário
-    $tipo_utilizador = isset($_POST['perfil']) ? $_POST['perfil'] : 'cliente';
-    $nome_utilizador = isset($_POST['username']) ? trim($_POST['username']) : '';
-    $password        = isset($_POST['password']) ? $_POST['password'] : '';
-    $password_conf   = isset($_POST['password_conf']) ? $_POST['password_conf'] : '';
-    
-    $_SESSION['old_nome_utilizador'] = $nome_utilizador;
+// 1. Importa a ligação à base de dados SQLite da raiz
+require_once dirname(__DIR__) . '/db.php';
+global $conn;
 
-    // Validações
-    if (empty($nome_utilizador) || empty($password) || empty($password_conf)) {
-        $_SESSION['erro'] = "Por favor, preencha todos os campos obrigatórios.";
-        header("Location: novoregisto.php");
-        exit();
-    } 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $pass = isset($_POST['password']) ? trim($_POST['password']) : '';
     
-    if ($password !== $password_conf) {
-        $_SESSION['erro'] = "As palavras-passe não coincidem.";
-        header("Location: novoregisto.php");
-        exit();
-    } 
-    
-    if (strlen($password) < 6) {
-        $_SESSION['erro'] = "A palavra-passe deve ter pelo menos 6 caracteres.";
-        header("Location: novoregisto.php");
+    // Define por padrão que novos registos pelo site são sempre do tipo 'cliente'
+    $tipo = 'cliente'; 
+
+    if (empty($user) || empty($pass)) {
+        echo "<script>alert('Por favor, preencha todos os campos.'); window.history.back();</script>";
         exit();
     }
 
-    // Verificar duplicação de utilizador
-    $stmt = $conn->prepare("SELECT id FROM utilizadores WHERE nome_utilizador = ?");
-    $stmt->bind_param("s", $nome_utilizador);
-    $stmt->execute();
-    $stmt->store_result();
-    
-    if ($stmt->num_rows > 0) {
-        $_SESSION['erro'] = "Este nome de utilizador já está registado.";
-        $stmt->close();
-        $conn->close();
-        header("Location: novoregisto.php");
-        exit();
-    }
-    $stmt->close();
+    try {
+        // 2. Verifica se o nome de utilizador já existe no banco de dados
+        $checkStmt = $conn->prepare("SELECT id FROM utilizadores WHERE nome_utilizador = :user");
+        $checkStmt->bindValue(':user', $user, SQLITE3_TEXT);
+        $checkResult = $checkStmt->execute();
+        
+        if ($checkResult->fetchArray()) {
+            echo "<script>alert('Esse nome de utilizador já está registado. Escolha outro.'); window.history.back();</script>";
+            exit();
+        }
 
-    // Encriptação e Inserção
-    $password_encriptada = password_hash($password, PASSWORD_DEFAULT);
-    
-    $stmt_insert = $conn->prepare("INSERT INTO utilizadores (tipo, nome_utilizador, password) VALUES (?, ?, ?)");
-    $stmt_insert->bind_param("sss", $tipo_utilizador, $nome_utilizador, $password_encriptada);
-    
-    if ($stmt_insert->execute()) {
-        unset($_SESSION['old_nome_utilizador']);
-        $_SESSION['sucesso'] = "Conta criada com sucesso! Já pode iniciar sessão.";
-        header("Location: ../login.php"); 
-        exit();
-    } else {
-        $_SESSION['erro'] = "Ocorreu um erro ao criar a conta. Tente novamente.";
-        header("Location: novoregisto.php");
-        exit();
-    }
+        // 3. Encripta a palavra-passe com hash seguro para a BD
+        $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
 
-    $stmt_insert->close();
-    $conn->close();
+        // 4. Insere o novo utilizador na tabela 'utilizadores'
+        $stmt = $conn->prepare("INSERT INTO utilizadores (nome_utilizador, password, tipo) VALUES (:user, :pass, :tipo)");
+        $stmt->bindValue(':user', $user, SQLITE3_TEXT);
+        $stmt->bindValue(':pass', $hashed_password, SQLITE3_TEXT);
+        $stmt->bindValue(':tipo', $tipo, SQLITE3_TEXT);
+        $stmt->execute();
+
+        // 5. Registo feito! Redireciona o utilizador diretamente para a página de login
+        echo "<script>alert('Conta criada com sucesso! Faça login para continuar.'); window.location.href='../login.php';</script>";
+        exit();
+
+    } catch (Exception $e) {
+        die("Erro ao registar conta no SQLite: " . $e->getMessage());
+    }
 } else {
-    header("Location: ../login.php");
+    header("Location: novoregisto.php");
     exit();
 }
 ?>
