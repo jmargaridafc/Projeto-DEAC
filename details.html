@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva - Your Details</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="logo"><a href="index.html">LOGO</a></h1>
+    <div class="icons">
+      <span>🌐</span>
+      <span>❓</span>
+      <span>👤</span>
+    </div>
+  </header>
+
+  <div class="steps">
+    <div class="step done">● <span>HOTEL SELECTION</span></div>
+    <div class="step done">● <span>YOUR DETAILS</span></div>
+    <div class="step">○ <span>Confirmation</span></div>
+  </div>
+
+  <form class="container" method="post" action="reservar.php" id="reserveForm">
+
+    <!-- Campos hidden: preenchidos pelo JS com os dados do hotel vindos da index.html -->
+    <input type="hidden" name="hotel"    id="hHotel">
+    <input type="hidden" name="quarto"   id="hQuarto">
+    <input type="hidden" name="checkin"  id="hCheckin">
+    <input type="hidden" name="checkout" id="hCheckout">
+    <input type="hidden" name="total"    id="hTotal">
+
+    <section class="left">
+
+      <h2>Enter your details</h2>
+      <div class="row">
+        <div class="field"><label>Name</label><input type="text" name="name" required placeholder="Joana"></div>
+        <div class="field"><label>Surname</label><input type="text" name="surname" required placeholder="Camacho"></div>
+        <div class="field"><label>E-mail address</label><input type="email" name="email" required placeholder="...@mail.com"></div>
+        <div class="field"><label>Phone number</label><input type="tel" name="phone" required placeholder="123456789"></div>
+      </div>
+
+      <hr>
+
+      <h2>Payment details</h2>
+      <div class="row">
+        <div class="field"><label>Name</label><input type="text" name="pay_name" required placeholder="Joana"></div>
+        <div class="field"><label>Surname</label><input type="text" name="pay_surname" required placeholder="Camacho"></div>
+      </div>
+      <div class="field">
+        <label>Card number</label>
+        <input type="text" name="card" required maxlength="19"
+               pattern="[0-9 ]{13,19}" title="13 a 19 dígitos"
+               placeholder="1234 1234 1234 1234"
+               oninput="this.value=this.value.replace(/[^0-9 ]/g,'')">
+      </div>
+      <div class="row">
+        <div class="field"><label>Expire date</label><input type="text" name="expire" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="MM/AA" placeholder="08/26"></div>
+        <div class="field"><label>CVV</label><input type="text" name="cvv" required maxlength="4" pattern="[0-9]{3,4}" title="3 ou 4 dígitos" placeholder="123"></div>
+      </div>
+
+      <hr>
+
+      <h2>Special requests</h2>
+      <textarea name="requests" placeholder="Type something..."></textarea>
+
+      <div class="actions">
+        <button type="submit">Reserve</button>
+      </div>
+    </section>
+
+    <aside class="right">
+      <h3>Hotel details</h3>
+      <div class="image-box">🖼️</div>
+      <h4 id="nomeHotel">Hotel</h4>
+      <p id="localHotel">—</p>
+
+      <hr>
+
+      <h3>Room details</h3>
+      <p>Room: <strong id="nomeQuarto">—</strong></p>
+
+      <hr>
+
+      <h3>Reservation details</h3>
+      <div class="row">
+        <div>
+          <p>Check-In</p>
+          <p><strong id="dataCheckin">—</strong></p>
+        </div>
+        <div>
+          <p>Check-Out</p>
+          <p><strong id="dataCheckout">—</strong></p>
+        </div>
+      </div>
+
+      <hr>
+
+      <h3>Price summary</h3>
+      <p class="price-row total"><strong>Total</strong><strong id="precoTotal">—</strong></p>
+    </aside>
+
+  </form>
+
+  <footer class="footer">
+    <div>
+      <p><strong>Subscribe via Email</strong></p>
+      <p>...</p>
+      <input type="email" placeholder="Email Address">
+    </div>
+    <div class="footer-info">
+      <p>+44 345 678 903 | mail@mail.com</p>
+      <p>Company data · Booking & Payment · Privacy Policy · Terms of Use</p>
+    </div>
+  </footer>
+</body>
+</html>
