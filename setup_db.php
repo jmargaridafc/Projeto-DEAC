@@ -13,11 +13,6 @@ $db->exec("CREATE TABLE IF NOT EXISTS reservas (
     preco REAL
 )");
 
-// 3. Cria a tabela de Newsletter
-$db->exec("CREATE TABLE IF NOT EXISTS newsletter (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT
-)");
 
 echo "SUCESSO: Base de dados e tabelas essenciais criadas com sucesso na raiz!\n";
 ?>
