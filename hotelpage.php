@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<?php
+$db_path = __DIR__ . '/hotel.db';
+$db = new SQLite3($db_path);
+$db->enableExceptions(true);
+
+$query = $db->query("SELECT id, nome, preco FROM hoteis");
+$dados_hoteis = [];
+while ($linha = $query->fetchArray(SQLITE3_ASSOC)) {
+    $dados_hoteis[] = $linha;
+}
+
+?>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +21,9 @@
 <body>
   
   <header>
-    <div class="logo">LOGO</div>
+    <div class="logo">
+      <a href="index.php" style="text-decoration: none; color: inherit;">LOGO</a>
+    </div>
     <nav class="header-nav">
       <a href="#" class="icon-link" title="Language">🌐</a>
       <a href="#" class="icon-link" title="Help">❓</a>
@@ -58,7 +72,7 @@
       </div>
 
       <aside class="booking-sidebar">
-        <div class="price-tag">Starting price €</div>
+        <div class="price-tag">Starting price <?php echo number_format(min(array_column($dados_hoteis, 'preco')), 2); ?>€</div>
         
         <div class="rating-section">
           <div class="rating-number">4.7 ⭐</div>
@@ -77,17 +91,19 @@
           <button class="icon-btn" title="More">⋯</button>
         </div>
 
-        <form action="verificar_disponibilidade.php" method="POST" class="booking-form">
-          <select name="quarto" required class="date-input" style="width:100%; margin-bottom:10px;">
-             <option value="" disabled selected>Escolha o Quarto</option>
-             <option value="Single">Single</option>
-             <option value="Double">Double</option>
-             <option value="Suite">Suite</option>
+        <form action="verificar_disponibilidade.php" method="POST" class="booking-form" id="formTriagem">
+          <select name="quarto" class="date-input" style="width:100%; margin-bottom:10px;" id="quartoSelect">
+             <option value="" disabled selected>Escolha o Hotel/Quarto</option>
+             <?php foreach ($dados_hoteis as $hotel): ?>
+                <option value="<?php echo htmlspecialchars($hotel['nome']); ?>">
+                   <?php echo htmlspecialchars($hotel['nome']); ?> - <?php echo number_format($hotel['preco'], 2); ?>€
+                </option>
+             <?php endforeach; ?>
           </select>
           
           <div class="date-inputs">
-            <input type="date" name="check_in" class="date-input" required>
-            <input type="date" name="check_out" class="date-input" required>
+            <input type="date" name="check_in" class="date-input" id="checkInInput">
+            <input type="date" name="check_out" class="date-input" id="checkOutInput">
           </div>
           
           <button type="submit" class="btn-availability">See availability</button>

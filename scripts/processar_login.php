@@ -1,58 +1,48 @@
 <?php
-// scripts/processar_login.php
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// 1. Carrega a ligação à base de dados SQLite
-require_once dirname(__DIR__) . '/db.php';
-global $conn;
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user = isset($_POST['username']) ? trim($_POST['username']) : '';
-    $pass = isset($_POST['password']) ? trim($_POST['password']) : '';
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+    $perfil_escolhido = isset($_POST['perfil']) ? trim($_POST['perfil']) : 'cliente'; 
 
-    if (empty($user) || empty($pass)) {
-        die("Por favor, preencha todos os campos.");
+    // 1. Vetor de Ligação (A correção estrutural)
+    try {
+        $db_path = __DIR__ . '/../hotel.db';
+        $db = new SQLite3($db_path);
+        $db->enableExceptions(true);
+    } catch (Exception $e) {
+        die("FALHA MATEMÁTICA NOVA: " . $e->getMessage());
     }
 
-    try {
-        // 2. Procura pelo utilizador na tabela
-        $stmt = $conn->prepare("SELECT * FROM utilizadores WHERE nome_utilizador = :user");
-        $stmt->bindValue(':user', $user, SQLITE3_TEXT);
-        $result = $stmt->execute();
-        $utilizador = $result->fetchArray(SQLITE3_ASSOC);
+    // 2. Extração de Identidade
+    $stmt = $db->prepare("SELECT * FROM utilizadores WHERE nome_utilizador = :user AND tipo = :tipo");
+    $stmt->bindValue(':user', $username, SQLITE3_TEXT);
+    $stmt->bindValue(':tipo', $perfil_escolhido, SQLITE3_TEXT);
+    $result = $stmt->execute();
+    $user = $result->fetchArray(SQLITE3_ASSOC);
 
-        // 3. Se o utilizador existir e a password estiver correta
-        if ($utilizador && password_verify($pass, $utilizador['password'])) {
-            
-            // Define as variáveis de sessão
-            $_SESSION['id'] = $utilizador['id'];
-            $_SESSION['nome'] = $utilizador['nome_utilizador'];
-            $_SESSION['tipo'] = $utilizador['tipo'];
+    // 3. Validação Criptográfica e Geração de Sessão
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['nome_utilizador'];
+        $_SESSION['tipo'] = $user['tipo'];
 
-            // 4. REQUISITO GUIÃO W2: Registar a data/hora atual do acesso na tabela
-            // Define o fuso horário de Portugal para a hora ficar certa
-            date_default_timezone_set('Europe/Lisbon');
-            $dataHoraAtual = date('Y-m-d H:i:s');
+        // Registo de acessos exigido pelo Guião W2
+        $agora = date('Y-m-d H:i:s');
+        $stmt_log = $db->prepare("INSERT INTO acessos (id_utilizador, data_hora) VALUES (:id, :hora)");
+        $stmt_log->bindValue(':id', $user['id'], SQLITE3_INTEGER);
+        $stmt_log->bindValue(':hora', $agora, SQLITE3_TEXT);
+        $stmt_log->execute();
 
-            $logStmt = $conn->prepare("INSERT INTO acessos (id_utilizador, data_hora) VALUES (:id_user, :data_hora)");
-            $logStmt->bindValue(':id_user', $utilizador['id'], SQLITE3_INTEGER);
-            $logStmt->bindValue(':data_hora', $dataHoraAtual, SQLITE3_TEXT);
-            $logStmt->execute();
-
-            // 5. Redireciona com sucesso para a Homepage
-            header("Location: ../index.php");
-            exit();
-        } else {
-            echo "<script>alert('Utilizador ou password incorretos.'); window.location.href='../login.php';</script>";
-        }
-    } catch (Exception $e) {
-        die("Erro no processo de Login/Acesso: " . $e->getMessage());
+        header("Location: ../reservations_painel.php");
+        exit;
+    } else {
+        header("Location: ../login.php");
+        exit;
     }
 } else {
     header("Location: ../login.php");
-    exit();
+    exit;
 }
 ?>
