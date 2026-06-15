@@ -16,13 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Define por padrão que novos registos pelo site são sempre do tipo 'cliente'
     $tipo = 'cliente'; 
 
-    if (empty($user) || empty($pass)) {
-        echo "<script>alert('Por favor, preencha todos os campos.'); window.history.back();</script>";
-        exit();
-    }
-
     try {
-        // 2. Verifica se o nome de utilizador já existe no banco de dados
+        // 2. Validação Exclusiva do Servidor: Verifica se o utilizador já existe
         $checkStmt = $conn->prepare("SELECT id FROM utilizadores WHERE nome_utilizador = :user");
         $checkStmt->bindValue(':user', $user, SQLITE3_TEXT);
         $checkResult = $checkStmt->execute();
@@ -35,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 3. Encripta a palavra-passe com hash seguro para a BD
         $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
 
-        // 4. Insere o novo utilizador na tabela 'utilizadores'
+        // 4. Insere o novo utilizador na tabela 'utilizadores' (Guardando o Hash Seguro)
         $stmt = $conn->prepare("INSERT INTO utilizadores (nome_utilizador, password, tipo) VALUES (:user, :pass, :tipo)");
         $stmt->bindValue(':user', $user, SQLITE3_TEXT);
         $stmt->bindValue(':pass', $hashed_password, SQLITE3_TEXT);

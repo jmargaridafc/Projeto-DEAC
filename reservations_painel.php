@@ -1,16 +1,20 @@
 <?php
-session_start();
+// 1. Inicia ou recupera a sessão ativa de forma segura
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
+// 2. PROTEÇÃO ANTI-INTRUSÃO: Se não estiver logado, vai para o login guardando o destino
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    $pagina_atual = basename(__FILE__); // Obtém "reservations_painel.php"
+    header("Location: login.php?next=" . $pagina_atual);
     exit;
 }
 
-// 1. Extração de Variáveis do Colega (Definição de Coordenadas de Segurança)
+// 3. Extração segura das credenciais guardadas na sessão
 $tipo_utilizador = isset($_SESSION['tipo']) ? $_SESSION['tipo'] : 'cliente';
 $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 ?>
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -21,7 +25,6 @@ $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 </head>
 <body>
   
-  <!-- CABEÇALHO -->
   <header>
     <div class="logo">LOGO</div>
     <nav class="header-nav">
@@ -31,21 +34,16 @@ $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
     </nav>
   </header>
 
-  <!-- CONTENTOR PRINCIPAL -->
   <div class="main-container">
     
-
-    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
     <main class="content">
       
       <h1>Manage Reservations</h1>
 
-      <!-- BARRA DE PESQUISA -->
       <div class="filters" style="display: flex; gap: 20px; align-items: center; margin-bottom: 30px; margin-top: 10px;">
         <input type="text" placeholder="Search by guest name, reservation ID or room">
       </div>
 
-      <!-- FILTROS -->
       <div class="filters">
         <div class="filter-group">
           <label for="status">Status</label>
@@ -73,7 +71,6 @@ $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
         </div>
       </div>
 
-      <!-- TABELA DE RESERVAS -->
       <table class="reservations-table" style="width: 100%; text-align: left; border-collapse: collapse;">
         <thead>
           <tr>
@@ -88,8 +85,8 @@ $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
           </tr>
         </thead>
         <tbody>
-<?php
-          $db = new SQLite3(__DIR__ . '/../hotel.db');
+          <?php
+          $db = new SQLite3(__DIR__ . '/hotel.db');
           
           // 1. Lógica de Ramificação de Permissões
           if ($tipo_utilizador === 'admin') {
@@ -137,7 +134,6 @@ $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
   </div>
 
-  <!-- RODAPÉ -->
   <footer>
     <div class="newsletter">
       <p>Subscribe to AdobeXD via Email</p>

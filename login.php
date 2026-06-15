@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); 
+}
+?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -37,23 +41,15 @@
                 </div>
             <?php endif; ?>
 
-            <form action="scripts/processar_login.php" method="POST" class="login-form">
-                
-                <div class="input-group">
-                    <label>Entrar como:</label>
-                    <div class="profile-selection">
-                        <label class="profile-radio">
-                            <input type="radio" name="perfil" value="cliente" checked>
-                            <span class="radio-custom"></span>
-                            Cliente
-                        </label>
-                        <label class="profile-radio">
-                            <input type="radio" name="perfil" value="admin">
-                            <span class="radio-custom"></span>
-                            Administrador
-                        </label>
-                    </div>
+            <?php if (isset($_SESSION['erro'])): ?>
+                <div style="color: #991b1b; background: #fee2e2; padding: 10px; margin-bottom: 15px; border-radius: 6px; font-size: 14px; text-align: left;">
+                    <?php echo $_SESSION['erro']; unset($_SESSION['erro']); ?>
                 </div>
+            <?php endif; ?>
+
+            <form id="loginForm" action="scripts/processar_login.php" method="POST" class="login-form">
+                
+                <input type="hidden" name="redirect_to" value="<?php echo isset($_GET['next']) ? htmlspecialchars($_GET['next']) : 'index.php'; ?>">
 
                 <div class="input-group">
                     <label for="username">Nome de Utilizador</label>
@@ -81,5 +77,4 @@
         </div>
     </main>
 
-</body>
-</html>
+    <script src="scripts/validacao_login

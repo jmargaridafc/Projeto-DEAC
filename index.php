@@ -10,12 +10,13 @@ require_once 'db.php';
 // 3. Só depois carrega o script que vai ler os hotéis
 include_once 'scripts/disponibilidade.php'; 
 
-// 4. Verifica se o utilizador atual é administrador
+// 4. Verifica se o utilizad~   or atual é administrador
 $isAdmin = (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin');
 ?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage - Reserva de Hotéis</title>
     <link rel="stylesheet" href="styles/style.css">
@@ -61,6 +62,7 @@ $isAdmin = (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin');
         <div class="header-container">
             <div class="logo">LOGO</div>
             <nav class="header-nav">
+                <a href="reservations_painel.php" class="nav-icon" title="Reservas" aria-label="Reservas">🛏️</a>
                 <a href="#" class="nav-icon" title="Idioma" aria-label="Idioma">🌐</a>
                 <a href="#" class="nav-icon" title="Ajuda" aria-label="Ajuda">❓</a>
                 <a href="login.php" class="nav-icon profile-icon" title="Ir para o Login" aria-label="Login">👤</a>
@@ -102,37 +104,42 @@ $isAdmin = (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin');
                     $indisponivel = ($hotel['vagas'] <= 0); 
                 ?>
                     
-                    <article class="hotel-card <?php echo $indisponivel ? 'card-indisponivel' : ''; ?>">
-                        <div class="card-image-placeholder">
-                            <span class="favorite-icon">🤍</span>
-                            
-                            <?php if ($indisponivel): ?>
-                                <div class="badge-indisponivel">Indisponível</div>
-                            <?php endif; ?>
-                        </div>
+                    <article class="hotel-card <?php echo $indisponivel ? 'card-indisponivel' : ''; ?>" style="position: relative;">
                         
-                        <div class="card-info">
-                            <div class="card-header">
-                                <h3><?php echo htmlspecialchars($hotel['nome']); ?></h3>
-                                <span class="rating"><?php echo htmlspecialchars($hotel['avaliacao']); ?> ★</span>
-                            </div>
-                            <p class="location"><?php echo htmlspecialchars($hotel['localizacao']); ?></p>
+                        <a href="<?php echo $indisponivel ? '#' : 'details.html?id=' . $hotel['id']; ?>" class="hotel-card-link" style="text-decoration: none; color: inherit; display: block;">
                             
-                            <div class="price-action-container" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="card-image-placeholder">
+                                <span class="favorite-icon" onclick="event.stopPropagation(); event.preventDefault();">🤍</span>
+                                
                                 <?php if ($indisponivel): ?>
-                                    <p class="price" style="color: #db4455; font-weight: bold;">Esgotado</p>
-                                <?php else: ?>
-                                    <p class="price">Price <span><?php echo htmlspecialchars($hotel['preco']); ?></span> €</p>
-                                <?php endif; ?>
-
-                                <?php if ($isAdmin): ?>
-                                    <div class="admin-actions" style="display: flex; gap: 12px; font-size: 1.2rem;">
-                                        <a href="#" onclick="editarPreco(<?php echo $hotel['id']; ?>, <?php echo $hotel['preco']; ?>); return false;" title="Editar Preço" style="text-decoration: none;">✏️</a>
-                                        <a href="#" onclick="if(confirm('Tem a certeza que deseja apagar este hotel?')) { window.location.href='scripts/eliminar_hotel.php?id=<?php echo $hotel['id']; ?>'; } return false;" title="Eliminar Hotel" style="text-decoration: none;">🗑️</a>
-                                    </div>
+                                    <div class="badge-indisponivel">Indisponível</div>
                                 <?php endif; ?>
                             </div>
-                        </div>
+                            
+                            <div class="card-info">
+                                <div class="card-header">
+                                    <h3><?php echo htmlspecialchars($hotel['nome']); ?></h3>
+                                    <span class="rating"><?php echo htmlspecialchars($hotel['avaliacao']); ?> ★</span>
+                                </div>
+                                <p class="location"><?php echo htmlspecialchars($hotel['localizacao']); ?></p>
+                                
+                                <div class="price-action-container" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <?php if ($indisponivel): ?>
+                                        <p class="price" style="color: #db4455; font-weight: bold;">Esgotado</p>
+                                    <?php else: ?>
+                                        <p class="price">Price <span><?php echo htmlspecialchars($hotel['preco']); ?></span> €</p>
+                                    <?php endif; ?>
+
+                                    <?php if ($isAdmin): ?>
+                                        <div class="admin-actions" style="display: flex; gap: 12px; font-size: 1.2rem;" onclick="event.stopPropagation(); event.preventDefault();">
+                                            <a href="#" onclick="editarPreco(<?php echo $hotel['id']; ?>, <?php echo $hotel['preco']; ?>); return false;" title="Editar Preço" style="text-decoration: none;">✏️</a>
+                                            <a href="#" onclick="if(confirm('Tem a certeza que deseja apagar este hotel?')) { window.location.href='scripts/eliminar_hotel.php?id=<?php echo $hotel['id']; ?>'; } return false;" title="Eliminar Hotel" style="text-decoration: none;">🗑️</a>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                        </a>
                     </article>
 
                 <?php endforeach; ?>
