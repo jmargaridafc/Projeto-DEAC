@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reserva - Confirmation</title>
-  <link rel="stylesheet" href="styles/styles.css">
+  <title>Reservation - Confirmation</title>
+  <link rel="stylesheet" href="styles/styles_reservation.css">
 </head>
 <body>
 
   <header class="header">
-    <h1 class="logo"><a href="index.html">LOGO</a></h1>
+    <h1 class="logo"><a href="index.php">LOGO</a></h1>
     <div class="icons">
       <span>🌐</span>
       <span>❓</span>
@@ -25,30 +25,52 @@
 
   <main class="confirmation">
     <div class="check-circle">✓</div>
-    <p class="confirm-text">A sua reserva foi confirmada com sucesso!</p>
+    <p class="confirm-text">Your reservation has been confirmed!</p>
 
     <div class="confirm-details">
-      <p><strong>Nº de reserva:</strong> <span id="resId">—</span></p>
-      <p><strong>Nome:</strong> <span id="resNome">—</span></p>
+      <p><strong>Reservation No.:</strong> <span id="resId">—</span></p>
+      <p><strong>Name:</strong> <span id="resName">—</span></p>
       <p><strong>Hotel:</strong> <span id="resHotel">—</span></p>
       <p><strong>Check-In:</strong> <span id="resCheckin">—</span></p>
       <p><strong>Check-Out:</strong> <span id="resCheckout">—</span></p>
-      <p><strong>Total pago:</strong> <span id="resTotal">—</span></p>
+      <p><strong>Total paid:</strong> <span id="resTotal">—</span></p>
     </div>
 
-    <p><a class="btn" href="index.html" style="margin-top:24px;">Voltar ao início</a></p>
+    <p><a class="btn" href="index.php" style="margin-top:24px;">Back to home</a></p>
+    <p><a class="btn" href="reservations_painel.php" style="margin-top:12px; background:#27ae60;">View my reservations</a></p>
   </main>
 
   <footer class="footer">
     <div>
       <p><strong>Subscribe via Email</strong></p>
-      <p>...</p>
+      <p>Get the best offers straight to your inbox.</p>
       <input type="email" placeholder="Email Address">
     </div>
     <div class="footer-info">
-      <p>+44 345 678 903 | mail@mail.com</p>
-      <p>Company data · Booking & Payment · Privacy Policy · Terms of Use</p>
+      <p>+351 210 000 000 | info@hotel.pt</p>
+      <p>Company data · Booking &amp; Payment · Privacy Policy · Terms of Use</p>
     </div>
   </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    function fill(id, key, fallback) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = params.get(key) || fallback || '—';
+    }
+
+    fill('resId',       'id',       '—');
+    fill('resName',     'nome',     '—');
+    fill('resHotel',    'hotel',    '—');
+    fill('resCheckin',  'checkin',  '—');
+    fill('resCheckout', 'checkout', '—');
+
+    const totalEl  = document.getElementById('resTotal');
+    const totalVal = params.get('total');
+    if (totalEl) {
+      totalEl.textContent = totalVal ? totalVal + ' €' : '—';
+    }
+  </script>
 </body>
 </html>

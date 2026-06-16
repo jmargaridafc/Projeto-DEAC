@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reserva - Your Details</title>
-  <link rel="stylesheet" href="styles/styles.css">
+  <title>Reservation - Your Details</title>
+  <link rel="stylesheet" href="styles/styles_reservation.css">
 </head>
 <body>
 
   <header class="header">
-    <h1 class="logo"><a href="index.html">LOGO</a></h1>
+    <h1 class="logo"><a href="index.php">LOGO</a></h1>
     <div class="icons">
       <span>🌐</span>
       <span>❓</span>
@@ -23,42 +23,68 @@
     <div class="step">○ <span>Confirmation</span></div>
   </div>
 
-  <form class="container" method="post" action="reservar.php" id="reserveForm">
+  <form class="container" method="post" action="reservar.php" id="reserveForm" novalidate>
 
-    <!-- Campos hidden: preenchidos pelo JS com os dados do hotel vindos da index.html -->
-    <input type="hidden" name="hotel"    id="hHotel">
-    <input type="hidden" name="quarto"   id="hQuarto">
-    <input type="hidden" name="checkin"  id="hCheckin">
-    <input type="hidden" name="checkout" id="hCheckout">
-    <input type="hidden" name="total"    id="hTotal">
+    <input type="hidden" name="hotel_id" id="hotelIdInput">
+    <input type="hidden" name="hotel"    id="hotelInput">
+    <input type="hidden" name="quarto"   id="roomInput">
+    <input type="hidden" name="checkin"  id="checkinInput">
+    <input type="hidden" name="checkout" id="checkoutInput">
+    <input type="hidden" name="total"    id="totalInput">
 
     <section class="left">
 
+      <div id="serverErrors" class="server-errors"></div>
+
       <h2>Enter your details</h2>
       <div class="row">
-        <div class="field"><label>Name</label><input type="text" name="name" required placeholder="Joana"></div>
-        <div class="field"><label>Surname</label><input type="text" name="surname" required placeholder="Camacho"></div>
-        <div class="field"><label>E-mail address</label><input type="email" name="email" required placeholder="...@mail.com"></div>
-        <div class="field"><label>Phone number</label><input type="tel" name="phone" required placeholder="123456789"></div>
+        <div class="field">
+          <label for="f_name">Name</label>
+          <input type="text" id="f_name" name="name" placeholder="Joana">
+        </div>
+        <div class="field">
+          <label for="f_surname">Surname</label>
+          <input type="text" id="f_surname" name="surname" placeholder="Camacho">
+        </div>
+        <div class="field">
+          <label for="f_email">E-mail address</label>
+          <input type="email" id="f_email" name="email" placeholder="...@mail.com">
+        </div>
+        <div class="field">
+          <label for="f_phone">Phone number</label>
+          <div class="phone-wrapper">
+            <span class="phone-prefix">🇵🇹 +351</span>
+            <input type="tel" id="f_phone" name="phone" placeholder="912 345 678" maxlength="13">
+          </div>
+        </div>
       </div>
 
       <hr>
 
       <h2>Payment details</h2>
       <div class="row">
-        <div class="field"><label>Name</label><input type="text" name="pay_name" required placeholder="Joana"></div>
-        <div class="field"><label>Surname</label><input type="text" name="pay_surname" required placeholder="Camacho"></div>
+        <div class="field">
+          <label for="f_pay_name">Name</label>
+          <input type="text" id="f_pay_name" name="pay_name" placeholder="Joana">
+        </div>
+        <div class="field">
+          <label for="f_pay_surname">Surname</label>
+          <input type="text" id="f_pay_surname" name="pay_surname" placeholder="Camacho">
+        </div>
       </div>
       <div class="field">
-        <label>Card number</label>
-        <input type="text" name="card" required maxlength="19"
-               pattern="[0-9 ]{13,19}" title="13 a 19 dígitos"
-               placeholder="1234 1234 1234 1234"
-               oninput="this.value=this.value.replace(/[^0-9 ]/g,'')">
+        <label for="f_card">Card number</label>
+        <input type="text" id="f_card" name="card" placeholder="1234 1234 1234 1234" maxlength="19">
       </div>
       <div class="row">
-        <div class="field"><label>Expire date</label><input type="text" name="expire" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="MM/AA" placeholder="08/26"></div>
-        <div class="field"><label>CVV</label><input type="text" name="cvv" required maxlength="4" pattern="[0-9]{3,4}" title="3 ou 4 dígitos" placeholder="123"></div>
+        <div class="field">
+          <label for="f_expire">Expire date</label>
+          <input type="text" id="f_expire" name="expire" placeholder="08/26" maxlength="5">
+        </div>
+        <div class="field">
+          <label for="f_cvv">CVV</label>
+          <input type="text" id="f_cvv" name="cvv" placeholder="123" maxlength="4">
+        </div>
       </div>
 
       <hr>
@@ -69,18 +95,19 @@
       <div class="actions">
         <button type="submit">Reserve</button>
       </div>
+
     </section>
 
     <aside class="right">
       <h3>Hotel details</h3>
       <div class="image-box">🖼️</div>
-      <h4 id="nomeHotel">Hotel</h4>
-      <p id="localHotel">—</p>
+      <h4 id="hotelName">—</h4>
+      <p id="hotelLocation">—</p>
 
       <hr>
 
       <h3>Room details</h3>
-      <p>Room: <strong id="nomeQuarto">—</strong></p>
+      <p>Room: <strong id="roomName">—</strong></p>
 
       <hr>
 
@@ -88,18 +115,18 @@
       <div class="row">
         <div>
           <p>Check-In</p>
-          <p><strong id="dataCheckin">—</strong></p>
+          <p><strong id="checkinDate">—</strong></p>
         </div>
         <div>
           <p>Check-Out</p>
-          <p><strong id="dataCheckout">—</strong></p>
+          <p><strong id="checkoutDate">—</strong></p>
         </div>
       </div>
 
       <hr>
 
       <h3>Price summary</h3>
-      <p class="price-row total"><strong>Total</strong><strong id="precoTotal">—</strong></p>
+      <p class="price-row total"><strong>Total</strong><strong id="totalPrice">—</strong></p>
     </aside>
 
   </form>
@@ -115,5 +142,50 @@
       <p>Company data · Booking & Payment · Privacy Policy · Terms of Use</p>
     </div>
   </footer>
+
+  <script src="scripts/validacao_reserva.js"></script>
+  <script>
+  (function () {
+    const params   = new URLSearchParams(window.location.search);
+    const hotelId  = params.get('id');
+    const checkin  = params.get('checkin')  || '';
+    const checkout = params.get('checkout') || '';
+
+    if (hotelId) document.getElementById('hotelIdInput').value = hotelId;
+    if (checkin)  { document.getElementById('checkinDate').textContent = checkin;  document.getElementById('checkinInput').value  = checkin; }
+    if (checkout) { document.getElementById('checkoutDate').textContent = checkout; document.getElementById('checkoutInput').value = checkout; }
+    if (!hotelId) return;
+
+    fetch('scripts/get_hotel.php?id=' + encodeURIComponent(hotelId))
+      .then(function(r) { return r.json(); })
+      .then(function(hotel) {
+        if (hotel.error) return;
+        document.getElementById('hotelName').textContent     = hotel.name;
+        document.getElementById('hotelLocation').textContent = hotel.location || '';
+        document.getElementById('roomName').textContent      = hotel.name;
+        document.getElementById('hotelIdInput').value = hotel.id;
+        document.getElementById('hotelInput').value   = hotel.name;
+        document.getElementById('roomInput').value    = hotel.name;
+
+        if (checkin && checkout) {
+          const nights = Math.round((new Date(checkout) - new Date(checkin)) / 86400000);
+          if (nights > 0) {
+            const total = (hotel.price * nights).toFixed(2);
+            document.getElementById('totalPrice').textContent = total + ' €';
+            document.getElementById('totalInput').value = total;
+          }
+        } else {
+          document.getElementById('totalPrice').textContent = hotel.price.toFixed(2) + ' €/night';
+        }
+      });
+
+    const error = params.get('server_error');
+    if (error) {
+      const box = document.getElementById('serverErrors');
+      box.textContent = decodeURIComponent(error);
+      box.style.display = 'block';
+    }
+  })();
+  </script>
 </body>
 </html>
