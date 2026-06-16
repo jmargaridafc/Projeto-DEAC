@@ -91,23 +91,24 @@ while ($linha = $query->fetchArray(SQLITE3_ASSOC)) {
           <button class="icon-btn" title="More">⋯</button>
         </div>
 
-        <form action="verificar_disponibilidade.php" method="POST" class="booking-form" id="formTriagem">
-          <select name="quarto" class="date-input" style="width:100%; margin-bottom:10px;" id="quartoSelect">
-             <option value="" disabled selected>Escolha o Hotel/Quarto</option>
-             <?php foreach ($dados_hoteis as $hotel): ?>
-                <option value="<?php echo htmlspecialchars($hotel['nome']); ?>">
-                   <?php echo htmlspecialchars($hotel['nome']); ?> - <?php echo number_format($hotel['preco'], 2); ?>€
-                </option>
-             <?php endforeach; ?>
-          </select>
-          
-          <div class="date-inputs">
-            <input type="date" name="check_in" class="date-input" id="checkInInput">
-            <input type="date" name="check_out" class="date-input" id="checkOutInput">
-          </div>
-          
-          <button type="submit" class="btn-availability">See availability</button>
-        </form>
+        <form action="scripts/verificar_disponibilidade.php" method="GET" class="booking-form" id="formTriagem">
+  
+  <select name="hotel_id" class="date-input" style="width:100%; margin-bottom:10px;" id="quartoSelect" required>
+     <option value="" disabled selected>Escolha o Hotel/Quarto</option>
+     <?php foreach ($dados_hoteis as $hotel): ?>
+        <option value="<?php echo htmlspecialchars($hotel['id']); ?>">
+           <?php echo htmlspecialchars($hotel['nome']); ?> - <?php echo number_format($hotel['preco'], 2); ?>€
+        </option>
+     <?php endforeach; ?>
+  </select>
+  
+  <div class="date-inputs">
+    <input type="date" name="checkin" class="date-input" id="checkInInput" required>
+    <input type="date" name="checkout" class="date-input" id="checkOutInput" required>
+  </div>
+  
+  <button type="submit" class="btn-availability">See availability</button>
+</form>
 
       </aside>
 

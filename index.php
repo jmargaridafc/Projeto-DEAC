@@ -106,7 +106,7 @@ $isAdmin = (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin');
                     
                     <article class="hotel-card <?php echo $indisponivel ? 'card-indisponivel' : ''; ?>" style="position: relative;">
                         
-                        <a href="<?php echo $indisponivel ? '#' : 'details.html?id=' . $hotel['id']; ?>" class="hotel-card-link" style="text-decoration: none; color: inherit; display: block;">
+                        <a href="<?php echo $indisponivel ? '#' : 'hotelpage.php?id=' . $hotel['id']; ?>" class="hotel-card-link" style="text-decoration: none; color: inherit; display: block;">
                             
                             <div class="card-image-placeholder">
                                 <span class="favorite-icon" onclick="event.stopPropagation(); event.preventDefault();">🤍</span>
