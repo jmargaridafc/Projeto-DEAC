@@ -26,7 +26,9 @@ $nome_utilizador = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 <body>
   
   <header>
-    <div class="logo">LOGO</div>
+    <div class="logo">
+  <a href="index.php" style="text-decoration: none; color: inherit;">LOGO</a>
+</div>
     <nav class="header-nav">
       <a href="#" class="icon-link" title="Language">🌐</a>
       <a href="#" class="icon-link" title="Help">❓</a>

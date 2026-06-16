@@ -4,10 +4,27 @@ $db_path = __DIR__ . '/hotel.db';
 $db = new SQLite3($db_path);
 $db->enableExceptions(true);
 
-$query = $db->query("SELECT id, nome, preco FROM hoteis");
+// Obter todos os hotéis para o formulário (agora trazemos TUDO: nome, preco, localizacao, etc)
+$query = $db->query("SELECT * FROM hoteis");
 $dados_hoteis = [];
 while ($linha = $query->fetchArray(SQLITE3_ASSOC)) {
     $dados_hoteis[] = $linha;
+}
+
+// Descobrir em qual hotel o utilizador clicou no index
+$id_recebido = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$hotel_selecionado = null;
+
+foreach ($dados_hoteis as $hotel) {
+    if ($hotel['id'] === $id_recebido) {
+        $hotel_selecionado = $hotel;
+        break;
+    }
+}
+
+// Se não vier nenhum ID no link por acidente, assumimos o 1º hotel para a página não "partir"
+if (!$hotel_selecionado && count($dados_hoteis) > 0) {
+    $hotel_selecionado = $dados_hoteis[0];
 }
 
 ?>
@@ -34,15 +51,15 @@ while ($linha = $query->fetchArray(SQLITE3_ASSOC)) {
   <div class="main-container">
     
     <section class="hotel-header">
-      <div class="hotel-info">
-        <h1>Lorem ipsum dolor sit amet, consetetur</h1>
-        <div class="hotel-meta">
-          <span class="meta-item">⭐ 101 guest reviews</span>
-          <span class="meta-item">📍 Location</span>
-          <span class="meta-item verified">✓ Verified Information</span>
-        </div>
-      </div>
-    </section>
+  <div class="hotel-info">
+    <h1><?php echo htmlspecialchars($hotel_selecionado['nome']); ?></h1>
+    <div class="hotel-meta">
+      <span class="meta-item">⭐ <?php echo number_format($hotel_selecionado['avaliacao'], 1); ?> Rating</span>
+      <span class="meta-item">📍 <?php echo htmlspecialchars($hotel_selecionado['localizacao']); ?></span>
+      <span class="meta-item verified">✓ Verified Information</span>
+    </div>
+  </div>
+</section>
 
     <section class="gallery-booking">
       
@@ -72,7 +89,7 @@ while ($linha = $query->fetchArray(SQLITE3_ASSOC)) {
       </div>
 
       <aside class="booking-sidebar">
-        <div class="price-tag">Starting price <?php echo number_format(min(array_column($dados_hoteis, 'preco')), 2); ?>€</div>
+        <div class="price-tag">Price: <?php echo number_format($hotel_selecionado['preco'], 2); ?>€ / night</div>
         
         <div class="rating-section">
           <div class="rating-number">4.7 ⭐</div>
@@ -93,13 +110,13 @@ while ($linha = $query->fetchArray(SQLITE3_ASSOC)) {
 
         <form action="scripts/verificar_disponibilidade.php" method="GET" class="booking-form" id="formTriagem">
   
-  <select name="hotel_id" class="date-input" style="width:100%; margin-bottom:10px;" id="quartoSelect" required>
-     <option value="" disabled selected>Escolha o Hotel/Quarto</option>
-     <?php foreach ($dados_hoteis as $hotel): ?>
-        <option value="<?php echo htmlspecialchars($hotel['id']); ?>">
-           <?php echo htmlspecialchars($hotel['nome']); ?> - <?php echo number_format($hotel['preco'], 2); ?>€
-        </option>
-     <?php endforeach; ?>
+  <input type="hidden" name="hotel_id" value="<?php echo htmlspecialchars($hotel_selecionado['id']); ?>">
+
+  <select name="tipo_quarto" class="date-input" style="width:100%; margin-bottom:10px;" id="quartoSelect" required>
+     <option value="" disabled selected>Escolha o tipo de quarto</option>
+     <option value="Single">Quarto Single</option>
+     <option value="Double">Quarto Duplo</option>
+     <option value="Suite">Suite</option>
   </select>
   
   <div class="date-inputs">

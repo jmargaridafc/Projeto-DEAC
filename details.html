@@ -145,47 +145,57 @@
 
   <script src="scripts/validacao_reserva.js"></script>
   <script>
-  (function () {
-    const params   = new URLSearchParams(window.location.search);
-    const hotelId  = params.get('id');
-    const checkin  = params.get('checkin')  || '';
-    const checkout = params.get('checkout') || '';
+(function () {
+  const params   = new URLSearchParams(window.location.search);
+  const hotelId  = params.get('id');
+  const checkin  = params.get('checkin')  || '';
+  const checkout = params.get('checkout') || '';
+  const tipoQuarto = params.get('tipo_quarto') || ''; // Apanhar o tipo de quarto
 
-    if (hotelId) document.getElementById('hotelIdInput').value = hotelId;
-    if (checkin)  { document.getElementById('checkinDate').textContent = checkin;  document.getElementById('checkinInput').value  = checkin; }
-    if (checkout) { document.getElementById('checkoutDate').textContent = checkout; document.getElementById('checkoutInput').value = checkout; }
-    if (!hotelId) return;
+  if (hotelId) document.getElementById('hotelIdInput').value = hotelId;
+  if (checkin)  { document.getElementById('checkinDate').textContent = checkin;  document.getElementById('checkinInput').value  = checkin; }
+  if (checkout) { document.getElementById('checkoutDate').textContent = checkout; document.getElementById('checkoutInput').value = checkout; }
+  if (!hotelId) return;
 
-    fetch('scripts/get_hotel.php?id=' + encodeURIComponent(hotelId))
-      .then(function(r) { return r.json(); })
-      .then(function(hotel) {
-        if (hotel.error) return;
-        document.getElementById('hotelName').textContent     = hotel.name;
-        document.getElementById('hotelLocation').textContent = hotel.location || '';
-        document.getElementById('roomName').textContent      = hotel.name;
-        document.getElementById('hotelIdInput').value = hotel.id;
-        document.getElementById('hotelInput').value   = hotel.name;
-        document.getElementById('roomInput').value    = hotel.name;
+  fetch('scripts/get_hotel.php?id=' + encodeURIComponent(hotelId))
+    .then(function(r) { return r.json(); })
+    .then(function(hotel) {
+      if (hotel.error) return;
+      document.getElementById('hotelName').textContent     = hotel.name;
+      document.getElementById('hotelLocation').textContent = hotel.location || '';
+      
+      // NOVA LÓGICA: Se existir tipo de quarto, junta-o ao nome do hotel!
+      if (tipoQuarto) {
+          document.getElementById('roomName').textContent = tipoQuarto;
+          document.getElementById('hotelInput').value     = hotel.name + ' - ' + tipoQuarto;
+          document.getElementById('roomInput').value      = tipoQuarto;
+      } else {
+          document.getElementById('roomName').textContent = hotel.name;
+          document.getElementById('hotelInput').value     = hotel.name;
+          document.getElementById('roomInput').value      = hotel.name;
+      }
 
-        if (checkin && checkout) {
-          const nights = Math.round((new Date(checkout) - new Date(checkin)) / 86400000);
-          if (nights > 0) {
-            const total = (hotel.price * nights).toFixed(2);
-            document.getElementById('totalPrice').textContent = total + ' €';
-            document.getElementById('totalInput').value = total;
-          }
-        } else {
-          document.getElementById('totalPrice').textContent = hotel.price.toFixed(2) + ' €/night';
+      document.getElementById('hotelIdInput').value = hotel.id;
+
+      if (checkin && checkout) {
+        const nights = Math.round((new Date(checkout) - new Date(checkin)) / 86400000);
+        if (nights > 0) {
+          const total = (hotel.price * nights).toFixed(2);
+          document.getElementById('totalPrice').textContent = total + ' €';
+          document.getElementById('totalInput').value = total;
         }
-      });
+      } else {
+        document.getElementById('totalPrice').textContent = hotel.price.toFixed(2) + ' €/night';
+      }
+    });
 
-    const error = params.get('server_error');
-    if (error) {
-      const box = document.getElementById('serverErrors');
-      box.textContent = decodeURIComponent(error);
-      box.style.display = 'block';
-    }
-  })();
-  </script>
+  const error = params.get('server_error');
+  if (error) {
+    const box = document.getElementById('serverErrors');
+    box.textContent = decodeURIComponent(error);
+    box.style.display = 'block';
+  }
+})();
+</script>
 </body>
 </html>
